@@ -32,4 +32,5 @@ func main() {
 
 	fmt.Println("Программа завершилась! Итого работ выполнено:", taskResult)
 	fmt.Println("Программа работала:", time.Since(timeInit))
+	fmt.Println("ssh hello")
 }
