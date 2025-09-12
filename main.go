@@ -1,36 +1,35 @@
 package main
 
 import (
-	"context"
 	"fmt"
-	"project/worker"
-	"sync"
-	"time"
+	"slices"
 )
 
 func main() {
-	workerContext, workerCancel := context.WithCancel(context.Background())
 
-	timeInit := time.Now()
-	taskSetPoint := worker.WorkerPool(workerContext, 100)
-	time.Sleep(3 * time.Second)
-	workerCancel()
-
-	var mtx sync.Mutex
-	var wg sync.WaitGroup
-	taskResult := 0
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		for val := range taskSetPoint {
-			mtx.Lock()
-			taskResult += val
-			mtx.Unlock()
+	var graph [][]int = [][]int{}
+	var start int
+	var used []bool = make([]bool, len(graph), len(graph))
+	parent := make([]int, len(graph), len(graph))
+	queue := make([]int, 1)
+	queue[0] = start
+	used[start] = true
+	for len(queue) > 0 {
+		v := queue[0]
+		queue = queue[1:]
+		for _, n := range graph[v] {
+			if !used[n] {
+				queue = append(queue, n)
+				parent[n] = v
+			}
 		}
-	}()
-	wg.Wait()
+	}
 
-	fmt.Println("Программа завершилась! Итого работ выполнено:", taskResult)
-	fmt.Println("Программа работала:", time.Since(timeInit))
-	fmt.Println("ssh hello")
+	var res []int
+	var end int
+	for v := end; v != -1; v = parent[v] {
+		res = append(res, v)
+	}
+	slices.Reverse(res)
+	fmt.Println(res)
 }
