@@ -4,7 +4,10 @@ import "fmt"
 
 func main() {
 	fmt.Println("Its hard to think")
-	for i := 0; i < 10; i++ {
-		fmt.Println("NewBranchTest")
+	fmt.Println("Main branch slightly ahead")
+	i := 0
+	for {
+		i += 1
+		fmt.Println(i)
 	}
 }
